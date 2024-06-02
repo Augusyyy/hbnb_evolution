@@ -1,3 +1,3 @@
 ## UML Diagram
 
-< img src="https://m.imgur.com/a/PgOYyXL.jpeg" alt="flowchart">
+< img src="https://i.imgur.com/3yqQnM7.png" alt="flowchart">
