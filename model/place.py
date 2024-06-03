@@ -122,11 +122,3 @@ class Place:
     def max_guests(self, value):
         self.__max_guests = value
         self.updated_at = datetime.now()
-
-    @property
-    def created_at(self):
-        return self.created_at
-
-    @property
-    def updated_at(self):
-        return self.updated_at

@@ -4,28 +4,20 @@ from datetime import datetime
 
 class Amenity:
     def __init__(self, name):
-        self._id = str(uuid.uuid4())
-        self._name = name
-        self._created_at = datetime.now().timestamp()
-        self._updated_at = self._created_at
+        self.__id = str(uuid.uuid4())
+        self.__name = name
+        self.created_at = datetime.now()
+        self.updated_at = self.created_at
 
     @property
     def id(self):
-        return self._id
+        return self.__id
 
     @property
     def name(self):
-        return self._name
+        return self.__name
 
     @name.setter
     def name(self, value):
-        self._name = value
-        self._updated_at = datetime.now().timestamp()
-
-    @property
-    def created_at(self):
-        return self._created_at
-
-    @property
-    def updated_at(self):
-        return self._updated_at
+        self.__name = value
+        self.updated_at = datetime.now()
