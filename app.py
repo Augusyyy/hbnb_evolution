@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask import Flask, jsonify, request
 from flask_restx import Api, Resource, fields
 
@@ -46,6 +48,10 @@ class UserList(Resource):
         first_name = data.get('first_name', '')
         last_name = data.get('last_name', '')
 
+        for user in user_data['User']:
+            if user['email'] == email:
+                api.abort(409, message='Email already exists')
+
         new_user = User(email, password, first_name, last_name)
 
         user_data['User'].append({
@@ -69,16 +75,69 @@ class UserList(Resource):
 
         return jsonify(return_data)
 
+
 @user_api.route('/<string:user_id>')
 class UserParam(Resource):
     def get(self, user_id):
-        pass
+        user_list = user_data['User']
+        for user in user_list:
+            if user['id'] == user_id:
+                return jsonify(user)
+
+        return "User not found"
 
     def delete(self, user_id):
-        pass
+        user_list = user_data['User']
+        user_to_delete = None
+
+        for user in user_list:
+            if user['id'] == user_id:
+                user_to_delete = user
+                break
+
+        if user_to_delete is None:
+            return jsonify({"error": "User not found"})
+
+        del user_list[user_to_delete]
+
+        return jsonify({"message": "User deleted successfully"})
 
     def put(self, user_id):
-        pass
+        if not request.json:
+            return jsonify({"message": "Missing JSON in request"})
+
+        data = request.get_json()
+
+        if data is None:
+            return jsonify({"error": "Invalid JSON data"})
+
+        user_modify = None
+        user_list = user_data['User']
+        for user in user_list:
+            if user['id'] == user_id:
+                user_modify = user
+                break
+
+        if user_modify is None:
+            return jsonify({"error": "User not found"})
+
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        password = data.get('password')
+
+        if first_name:
+            user_modify['first_name'] = first_name
+        if last_name:
+            user_modify['last_name'] = last_name
+        if email:
+            user_modify['email'] = email
+        if password:
+            user_modify['password'] = password
+
+        user_modify['updated_at'] = datetime.now()
+
+        return jsonify(user_modify)
 
 
 if __name__ == '__main__':
