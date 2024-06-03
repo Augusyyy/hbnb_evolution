@@ -78,6 +78,8 @@ class UserList(Resource):
 
 @user_api.route('/<string:user_id>')
 class UserParam(Resource):
+    @user_api.doc('create user by id')
+    @user_api.response(404, 'User not found')
     def get(self, user_id):
         user_list = user_data['User']
         for user in user_list:
@@ -86,6 +88,9 @@ class UserParam(Resource):
 
         return "User not found"
 
+    @user_api.doc('delete_user')
+    @user_api.response(204, 'User deleted successfully')
+    @user_api.response(404, 'User not found')
     def delete(self, user_id):
         user_list = user_data['User']
         user_to_delete = None
@@ -102,6 +107,12 @@ class UserParam(Resource):
 
         return jsonify({"message": "User deleted successfully"})
 
+    @user_api.doc('update_user')
+    @user_api.expect(user_model)
+    @user_api.response(200, 'User updated successfully')
+    @user_api.response(400, 'Invalid input')
+    @user_api.response(404, 'User not found')
+    @user_api.response(409, 'Email already exists')
     def put(self, user_id):
         if not request.json:
             return jsonify({"message": "Missing JSON in request"})
