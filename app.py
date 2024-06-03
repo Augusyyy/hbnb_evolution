@@ -85,8 +85,7 @@ class UserParam(Resource):
         for user in user_list:
             if user['id'] == user_id:
                 return jsonify(user)
-
-        return "User not found"
+        api.abort(404, message='User not found!')
 
     @user_api.doc('delete_user')
     @user_api.response(204, 'User deleted successfully')
@@ -101,7 +100,7 @@ class UserParam(Resource):
                 break
 
         if user_to_delete is None:
-            return jsonify({"error": "User not found"})
+            api.abort(404, message='User not found!')
 
         del user_list[user_to_delete]
 
@@ -115,12 +114,12 @@ class UserParam(Resource):
     @user_api.response(409, 'Email already exists')
     def put(self, user_id):
         if not request.json:
-            return jsonify({"message": "Missing JSON in request"})
+            api.abort(400, message='Invalid input')
 
         data = request.get_json()
 
         if data is None:
-            return jsonify({"error": "Invalid JSON data"})
+            api.abort(400, message='Invalid input')
 
         user_modify = None
         user_list = user_data['User']
@@ -130,7 +129,7 @@ class UserParam(Resource):
                 break
 
         if user_modify is None:
-            return jsonify({"error": "User not found"})
+            api.abort(404, message='User not found!')
 
         first_name = data.get('first_name')
         last_name = data.get('last_name')
