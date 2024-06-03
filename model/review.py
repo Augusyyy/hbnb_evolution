@@ -4,17 +4,13 @@ from datetime import datetime
 
 class Review:
     def __init__(self, commentor_user_id, place_id, feedback, rating):
-        self.__id = str(uuid.uuid4())
+        self.id = str(uuid.uuid4())
         self.__commentor_user_id = commentor_user_id
         self.__place_id = place_id
         self.__feedback = feedback
         self.__rating = rating
         self.created_at = datetime.now()
         self.updated_at = self.created_at
-
-    @property
-    def id(self):
-        return self.__id
 
     @property
     def commentor_user_id(self):
