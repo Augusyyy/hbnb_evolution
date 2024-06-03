@@ -28,20 +28,18 @@ class UserList(Resource):
     @user_api.response(201, 'User created successfully')
     @user_api.response(400, 'Invalid input')
     @user_api.response(409, 'Email already exists')
-
-
     def post(self):
         if not request.json:
-            return jsonify({"message": "Missing JSON in request"})
+            api.abort(400, message='Invalid input')
 
         data = request.get_json()
 
         if data is None:
-            return jsonify({"error": "Invalid JSON data"})
+            api.abort(400, message='Invalid input')
         if 'email' not in data:
-            return jsonify({"error": "Missing email"})
+            api.abort(400, message='Invalid input')
         if 'password' not in data:
-            return jsonify({"error": "Missing password"})
+            api.abort(400, message='Invalid input')
 
         email = data['email']
         password = data['password']
