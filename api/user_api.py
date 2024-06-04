@@ -4,7 +4,7 @@ from urllib import request
 from flask import jsonify
 from flask_restx import fields
 
-from api import api, user_api, app
+from api import api, user_api
 from data import user_data
 
 user_model = api.model('User', {
@@ -72,7 +72,7 @@ class UserList(Resource):
 
         return jsonify(return_data)
 
-    
+
 @user_api.route('/<string:user_id>')
 class UserParam(Resource):
     @user_api.doc('create user by id')
@@ -145,7 +145,3 @@ class UserParam(Resource):
         user_modify['updated_at'] = datetime.now()
 
         return jsonify(user_modify)
-
-
-if __name__ == '__main__':
-    app.run()
