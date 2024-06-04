@@ -5,7 +5,7 @@ from api import cities_api
 from data import city_data
 from model.city import City
 
-city_model = api.model('City', {
+city_model = cities_api.model('City', {
     'id': fields.String(required=True, description='City id'),
     'country_id': fields.String(required=True, description='Country id'),
     'name': fields.String(required=True, description='City name')

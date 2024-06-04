@@ -5,7 +5,7 @@ from api import amenities_api
 from data import amenity_data
 from model.amenity import Amenity
 
-amenity_model = api.model('Amenity', {
+amenity_model = amenities_api.model('Amenity', {
     'id': fields.String(required=True, description='Amenity id'),
     'name': fields.String(required=True, description='Amenity name')
 })
