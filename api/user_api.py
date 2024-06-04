@@ -1,40 +1,37 @@
-from datetime import datetime
+from importlib.resources import Resource
+from urllib import request
 
-from flask import Flask, jsonify, request
-from flask_restx import Api, Resource, fields
+from flask import jsonify
+from flask_restx import fields
 
+from api import api, user_api, app
 from data import user_data
-from model.user import User
 
-# app = Flask(__name__)
-#
-# api = Api(app, version='1.0', title='hbnb_evolution API', description='A hbnb_evolution project API')
-# user_api = api.namespace("users", description='User operation')
-#
-# user_model = api.model('User', {
-#     'email': fields.String(required=True, description='Email address'),
-#     'first_name': fields.String(required=True, description='First name'),
-#     'last_name': fields.String(required=True, description='Last name'),
-#     'password': fields.String(required=True, description='Password')
-# })
-#
-#
-# @user_api.route("")
-# class UserList(Resource):
-#     @user_api.doc("get all users")
-#     def get(self):
-#         return jsonify(user_data['User'])
-#
-#     @user_api.doc('create user')
-#     @user_api.expect(user_model)
-#     @user_api.response(201, 'User created successfully')
-#     @user_api.response(400, 'Invalid input')
-#     @user_api.response(409, 'Email already exists')
-#     def post(self):
-#         if not request.json:
-#             api.abort(400, message='Invalid input')
-#
-#         data = request.get_json()
+user_model = api.model('User', {
+    'email': fields.String(required=True, description='Email address'),
+    'first_name': fields.String(required=True, description='First name'),
+    'last_name': fields.String(required=True, description='Last name'),
+    'password': fields.String(required=True, description='Password')
+})
+
+
+@user_api.route("")
+class UserList(Resource):
+    @user_api.doc("get all users")
+    def get(self):
+        return jsonify(user_data['User'])
+
+    @user_api.doc('create user')
+    @user_api.expect(user_model)
+    @user_api.response(201, 'User created successfully')
+    @user_api.response(400, 'Invalid input')
+    @user_api.response(409, 'Email already exists')
+    def post(self):
+        if not request.json:
+            api.abort(400, message='Invalid input')
+
+        data = request.get_json()
+
 
         if data is None:
             api.abort(400, message='Invalid input')
@@ -75,7 +72,7 @@ from model.user import User
 
         return jsonify(return_data)
 
-
+    
 @user_api.route('/<string:user_id>')
 class UserParam(Resource):
     @user_api.doc('create user by id')
