@@ -14,6 +14,7 @@ city_model = cities_api.model('City', {
 
 @cities_api.route("/")
 class NewCity(Resource):
+    @cities_api.expect(city_model)
     @cities_api.doc('creat new city')
     def post(self):
         pass
@@ -30,6 +31,7 @@ class Cities(Resource):
         pass
 
     @cities_api.doc('Update an existing cities inform')
+    @cities_api.expect(city_model)
     def put(self, country_id):
         pass
 

@@ -23,6 +23,7 @@ place_model = places_api.model('PLance', {
 
 @places_api.route("/")
 class NewPlace(Resource):
+    @places_api.expect(place_model)
     @places_api.doc('New place')
     def post(self):
         pass
@@ -38,6 +39,7 @@ class EditPlace(Resource):
     def get(self, place_id):
         pass
 
+    @places_api.expect(place_model)
     @places_api.doc('update a place')
     def put(self, place_id):
         pass
@@ -49,6 +51,7 @@ class EditPlace(Resource):
 
 @places_api.route('/<string:place_id>/reviews')
 class PLaceReviews(Resource):
+    @places_api.expect(place_model)
     @places_api.doc('new reviews for a place')
     def post(self, place_id):
         pass

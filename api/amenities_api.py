@@ -13,6 +13,7 @@ amenity_model = amenities_api.model('Amenity', {
 
 @amenities_api.route("/")
 class NewAmenity(Resource):
+    @amenities_api.expect(amenity_model)
     @amenities_api.doc('create_amenity')
     def post(self):
         pass
@@ -29,6 +30,7 @@ class EditAmenity(Resource):
         pass
 
     @amenities_api.doc('update inform about an amenity')
+    @amenities_api.expect(amenity_model)
     def put(self, amenity_id):
         pass
 
