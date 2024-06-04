@@ -6,7 +6,7 @@ from data import review_data
 from model.review import Review
 
 
-country_model = api.model('Review', {
+review_model = api.model('Review', {
     'id': fields.String(required=True, description='Review id'),
     'comment_user_id': fields.String(required=True, description='comment user id'),
     'place_id': fields.String(required=True, description='place id'),

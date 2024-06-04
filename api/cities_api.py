@@ -5,7 +5,7 @@ from api import api, country_api, cities_api
 from data import city_data
 from model.city import City
 
-country_model = api.model('City', {
+city_model = api.model('City', {
     'id': fields.String(required=True, description='City id'),
     'country_id': fields.String(required=True, description='Country id'),
     'name': fields.String(required=True, description='City name')
@@ -14,26 +14,26 @@ country_model = api.model('City', {
 
 @cities_api.route("/")
 class NewCity(Resource):
-    @country_api.doc('creat new city')
+    @cities_api.doc('creat new city')
     def post(self):
         pass
 
-    @country_api.doc('Retrieve all cities.')
+    @cities_api.doc('Retrieve all cities.')
     def get(self):
         pass
 
 
 @cities_api.route('/<string:country_id>')
 class Cities(Resource):
-    @country_api.doc('Retrieve details ofa specific city')
+    @cities_api.doc('Retrieve details ofa specific city')
     def get(self, country_id):
         pass
 
-    @country_api.doc('Update an existing cities inform')
+    @cities_api.doc('Update an existing cities inform')
     def put(self, country_id):
         pass
 
-    @country_api.doc('Delete a specific city')
+    @cities_api.doc('Delete a specific city')
     def delete(self, country_id):
         pass
 
