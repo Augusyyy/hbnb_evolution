@@ -1,11 +1,14 @@
-from importlib.resources import Resource
+from datetime import datetime
 from urllib import request
+
+from flask_restx import Resource
 
 from flask import jsonify
 from flask_restx import fields
 
 from api import api, user_api
 from data import user_data
+from model.user import User
 
 user_model = api.model('User', {
     'email': fields.String(required=True, description='Email address'),
@@ -31,7 +34,6 @@ class UserList(Resource):
             api.abort(400, message='Invalid input')
 
         data = request.get_json()
-
 
         if data is None:
             api.abort(400, message='Invalid input')

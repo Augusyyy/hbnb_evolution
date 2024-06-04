@@ -7,4 +7,3 @@ api = Api(app, version='1.0', title='hbnb_evolution API', description='A hbnb_ev
 user_api = api.namespace("users", description='User operation')
 
 from api.user_api import *
-
