@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import api, country_api, cities_api
+from api import cities_api
 from data import city_data
 from model.city import City
 

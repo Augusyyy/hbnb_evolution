@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import api, amenities_api
+from api import amenities_api
 from data import amenity_data
 from model.amenity import Amenity
 
