@@ -14,6 +14,7 @@ country_model = api.model('Review', {
     'rating': fields.Integer(required=True, description='rating')
 })
 
+
 @reviews_api.route("/<string:review_id>")
 class EditReview(Resource):
     @reviews_api.doc('inform about review')
