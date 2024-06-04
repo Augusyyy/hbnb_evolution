@@ -5,7 +5,7 @@ from api import places_api
 from data import place_data
 from model.place import Place
 
-place_model = places_api.model('PLance', {
+place_model = places_api.model('Place', {
     'id': fields.String(required=True, description='place id'),
     'host_user_id': fields.String(required=True, description='Host user id'),
     'name': fields.String(required=True, description='Hotel name'),
