@@ -147,3 +147,10 @@ class UserParam(Resource):
         user_modify['updated_at'] = datetime.now()
 
         return jsonify(user_modify)
+
+
+@user_api.route('/<string:user_id>/reviews')
+class UserReview(Resource):
+    @user_api.doc('all the reviews for a user')
+    def get(self, user_id):
+        pass
