@@ -74,8 +74,6 @@ class DataManager(IPersistenceManager):
         else:
             return None
 
-        
-
     def save(self, entity):
         if isinstance(entity, User):
             new_entity = {
@@ -315,6 +313,22 @@ class DataManager(IPersistenceManager):
                 if city['id'] == entity_id:
                     return city
             return None
+        else:
+            raise TypeError("Unsupported entity type")
+
+    def get_list(self, entity_type):
+        if entity_type == EntityType.COUNTRY:
+            return self.__countries['Country']
+        elif entity_type == EntityType.PLACE:
+            return self.__places['Place']
+        elif entity_type == EntityType.REVIEW:
+            return self.__review['Review']
+        elif entity_type == EntityType.USER:
+            return self.__user['User']
+        elif entity_type == EntityType.AMENITY:
+            return self.__amenity['AMENITY']
+        elif entity_type == EntityType.City:
+            return self.__cities['City']
         else:
             raise TypeError("Unsupported entity type")
 
