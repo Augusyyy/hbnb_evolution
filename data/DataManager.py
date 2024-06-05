@@ -60,14 +60,21 @@ class DataManager(IPersistenceManager):
             self.__review = json.loads(f.read())
 
     def delete(self, entity_id, entity_type):
-        filename = 'data/' + entity_type.value + '.json'
-        try:
-            with open(filename, "r") as f:
-                if entity_type == EntityType.USER:
-                    self.__user = json.loads(f.read())
-        except FileNotFoundError:
-            if entity_type == EntityType.USER:
-                self.__user = {}
+        delete_data = None
+        for i in range(len(self.__user['User'])):
+            if self.__user['User'][i]['id'] == entity_id:
+                delete_data = self.__user['User'][i]
+                self.__user['User'].pop(i)
+                break
+        if delete_data is not None:
+            filename = 'data/' + EntityType.USER.value + '.json'
+            with open(filename, "w") as f:
+                f.write(json.dumps(self.__user, indent=4))
+            return delete_data
+        else:
+            return None
+
+        
 
     def save(self, entity):
         if isinstance(entity, User):
