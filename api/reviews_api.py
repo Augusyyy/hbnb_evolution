@@ -21,7 +21,7 @@ class EditReview(Resource):
         pass
 
     @reviews_api.doc('update review')
-    @reviews_api.expect(review_data)
+    @reviews_api.expect(review_model)
     def put(self, review_id):
         pass
 
