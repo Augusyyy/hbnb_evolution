@@ -1,13 +1,12 @@
 from datetime import datetime
 from urllib import request
-
 from flask_restx import Resource
-
 from flask import jsonify
 from flask_restx import fields
-
 from api import api, user_api
 from model.user import User
+from api import DataManager
+from data.DataManager import EntityType
 
 user_model = api.model('User', {
     'email': fields.String(required=True, description='Email address'),
@@ -21,7 +20,7 @@ user_model = api.model('User', {
 class UserList(Resource):
     @user_api.doc("get all users")
     def get(self):
-        return jsonify(user_data['User'])
+        return DataManager.get_list(EntityType.USER)
 
     @user_api.doc('create user')
     @user_api.expect(user_model)
@@ -46,32 +45,16 @@ class UserList(Resource):
         first_name = data.get('first_name', '')
         last_name = data.get('last_name', '')
 
-        for user in user_data['User']:
+        user_list = DataManager.get_list(EntityType.USER)
+        for user in user_list:
             if user['email'] == email:
                 api.abort(409, message='Email already exists')
 
         new_user = User(email, password, first_name, last_name)
 
-        user_data['User'].append({
-            'id': new_user.id,
-            'created_at': new_user.created_at.isoformat(),
-            'updated_at': new_user.updated_at.isoformat(),
-            'first_name': new_user.first_name,
-            'last_name': new_user.last_name,
-            'email': new_user.email,
-            'password': new_user.password
-        })
+        result = DataManager.save(new_user)
 
-        return_data = {
-            'id': new_user.id,
-            'created_at': new_user.created_at.isoformat(),
-            'updated_at': new_user.updated_at.isoformat(),
-            'first_name': new_user.first_name,
-            'last_name': new_user.last_name,
-            'email': new_user.email
-        }
-
-        return jsonify(return_data)
+        return result
 
 
 @user_api.route('/<string:user_id>')
@@ -79,30 +62,21 @@ class UserParam(Resource):
     @user_api.doc('create user by id')
     @user_api.response(404, 'User not found')
     def get(self, user_id):
-        user_list = user_data['User']
-        for user in user_list:
-            if user['id'] == user_id:
-                return jsonify(user)
-        api.abort(404, message='User not found!')
+        result = DataManager.get(user_id)
+        if result is None:
+            api.abort(404, message='User not found')
+        else:
+            return result
 
     @user_api.doc('delete_user')
     @user_api.response(204, 'User deleted successfully')
     @user_api.response(404, 'User not found')
     def delete(self, user_id):
-        user_list = user_data['User']
-        user_to_delete = None
-
-        for user in user_list:
-            if user['id'] == user_id:
-                user_to_delete = user
-                break
-
-        if user_to_delete is None:
-            api.abort(404, message='User not found!')
-
-        del user_list[user_to_delete]
-
-        return jsonify({"message": "User deleted successfully"})
+        result = DataManager.delete(user_id)
+        if result is None:
+            api.abort(404, message='User not found')
+        else:
+            return jsonify({"message": "User deleted successfully"})
 
     @user_api.doc('update_user')
     @user_api.expect(user_model)
@@ -111,41 +85,22 @@ class UserParam(Resource):
     @user_api.response(404, 'User not found')
     @user_api.response(409, 'Email already exists')
     def put(self, user_id):
-        if not request.json:
-            api.abort(400, message='Invalid input')
-
         data = request.get_json()
+        if request.get_json() is None:
+            user_api.bort(400, "Invalid input")
 
-        if data is None:
-            api.abort(400, message='Invalid input')
+        user_list = DataManager.get_list(EntityType.USER)
+        for item in user_list:
+            if item['email'] == data['email'] and user_id != item['id']:
+                user_api.abort(409, 'Email already exists')
 
-        user_modify = None
-        user_list = user_data['User']
-        for user in user_list:
-            if user['id'] == user_id:
-                user_modify = user
-                break
-
-        if user_modify is None:
-            api.abort(404, message='User not found!')
-
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
-        email = data.get('email')
-        password = data.get('password')
-
-        if first_name:
-            user_modify['first_name'] = first_name
-        if last_name:
-            user_modify['last_name'] = last_name
-        if email:
-            user_modify['email'] = email
-        if password:
-            user_modify['password'] = password
-
-        user_modify['updated_at'] = datetime.now()
-
-        return jsonify(user_modify)
+        u = User(data['first_name'], data['last_name'], data['email'], data['password'])
+        u.id = user_id
+        result = DataManager.update(u)
+        if result is None:
+            return user_api.abort(404, message='User not found')
+        else:
+            return result, 201
 
 
 @user_api.route('/<string:user_id>/reviews')
