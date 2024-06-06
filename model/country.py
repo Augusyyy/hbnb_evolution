@@ -7,8 +7,8 @@ class Country:
         self.id = str(uuid.uuid4())
         self.__name = name
         self.__code = code
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.created_at = datetime.now().timestamp()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def name(self):
@@ -17,7 +17,7 @@ class Country:
     @name.setter
     def name(self, value):
         self.__name = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def code(self):
@@ -26,4 +26,4 @@ class Country:
     @code.setter
     def code(self, value):
         self.__code = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()

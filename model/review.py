@@ -9,7 +9,7 @@ class Review:
         self.__place_id = place_id
         self.__feedback = feedback
         self.__rating = rating
-        self.created_at = datetime.now()
+        self.created_at = datetime.now().timestamp()
         self.updated_at = self.created_at
 
     @property
@@ -19,7 +19,7 @@ class Review:
     @commentor_user_id.setter
     def commentor_user_id(self, value):
         self.__commentor_user_id = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def place_id(self):
@@ -28,7 +28,7 @@ class Review:
     @place_id.setter
     def place_id(self, value):
         self.__place_id = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def feedback(self):
@@ -37,7 +37,7 @@ class Review:
     @feedback.setter
     def feedback(self, value):
         self.__feedback = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def rating(self):
@@ -46,4 +46,4 @@ class Review:
     @rating.setter
     def rating(self, value):
         self.__rating = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()

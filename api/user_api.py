@@ -1,5 +1,5 @@
 from datetime import datetime
-from urllib import request
+from flask import request
 from flask_restx import Resource
 from flask import jsonify
 from flask_restx import fields

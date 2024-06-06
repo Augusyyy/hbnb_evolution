@@ -75,6 +75,65 @@ class DataManager(IPersistenceManager):
             else:
                 return None
 
+        elif entity_type == EntityType.CITY:
+            pass
+
+        elif entity_type == EntityType.PLACE:
+            for i in range(len(self.__countries['Country'])):
+                if self.__countries['Country'][i]['id'] == entity_id:
+                    delete_data = self.__countries['Country'][i]
+                    self.__countries['Country'].pop(i)
+                    break
+                if delete_data is not None:
+                    filename = 'data/' + EntityType.PLACE.value + '.json'
+                    with open(filename, "w") as f:
+                        f.write(json.dumps(self.__countries, indent=4))
+                        return delete_data
+            else:
+                return None
+
+        elif entity_type == EntityType.REVIEW:
+            for i in range(len(self.__review['Review'])):
+                if self.__review['Review'][i]['id'] == entity_id:
+                    delete_data = self.__review['Review'][i]
+                    self.__review['Review'].pop(i)
+                    break
+                if delete_data is not None:
+                    filename = 'data/' + EntityType.REVIEW.value + '.json'
+                    with open(filename, "w") as f:
+                        f.write(json.dumps(self.__review, indent=4))
+                        return delete_data
+            else:
+                return None
+
+        elif entity_type == EntityType.AMENITY:
+            for i in range(len(self.__amenity['Amenity'])):
+                if self.__amenity['Amenity'][i]['id'] == entity_id:
+                    delete_data = self.__amenity['Amenity'][i]
+                    self.__amenity['Amenity'].pop(i)
+                    break
+                if delete_data is not None:
+                    filename = 'data/' + EntityType.AMENITY.value + '.json'
+                    with open(filename, "w") as f:
+                        f.write(json.dumps(self.__amenity, indent=4))
+                        return delete_data
+            else:
+                return None
+
+        elif entity_type == EntityType.CITY:
+            for i in range(len(self.__cities['City'])):
+                if self.__cities['City'][i]['id'] == entity_id:
+                    delete_data = self.__cities['City'][i]
+                    self.__cities['City'].pop(i)
+                    break
+                if delete_data is not None:
+                    filename = 'data/' + EntityType.CITY.value + '.json'
+                    with open(filename, "w") as f:
+                        f.write(json.dumps(self.__cities, indent=4))
+                        return delete_data
+            else:
+                return None
+
     def save(self, entity):
         if isinstance(entity, User):
             new_entity = {

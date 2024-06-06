@@ -28,7 +28,7 @@ class Place:
     @host_user_id.setter
     def host_user_id(self, value):
         self.__host_user_id = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def city_id(self):
@@ -37,7 +37,7 @@ class Place:
     @city_id.setter
     def city_id(self, value):
         self.__city_id = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def name(self):
@@ -46,7 +46,7 @@ class Place:
     @name.setter
     def name(self, value):
         self.__name = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def description(self):
@@ -55,7 +55,7 @@ class Place:
     @description.setter
     def description(self, value):
         self.__description = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def address(self):
@@ -64,7 +64,7 @@ class Place:
     @address.setter
     def address(self, value):
         self.__address = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def latitude(self):
@@ -73,7 +73,7 @@ class Place:
     @latitude.setter
     def latitude(self, value):
         self.__latitude = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def longitude(self):
@@ -82,7 +82,7 @@ class Place:
     @longitude.setter
     def longitude(self, value):
         self.__longitude = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def number_of_rooms(self):
@@ -91,7 +91,7 @@ class Place:
     @number_of_rooms.setter
     def number_of_rooms(self, value):
         self.__number_of_rooms = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def bathrooms(self):
@@ -100,7 +100,7 @@ class Place:
     @bathrooms.setter
     def bathrooms(self, value):
         self.__bathrooms = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def price_per_night(self):
@@ -109,7 +109,7 @@ class Place:
     @price_per_night.setter
     def price_per_night(self, value):
         self.__price_per_night = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
 
     @property
     def max_guests(self):
@@ -118,4 +118,4 @@ class Place:
     @max_guests.setter
     def max_guests(self, value):
         self.__max_guests = value
-        self.updated_at = datetime.now()
+        self.updated_at = datetime.now().timestamp()
