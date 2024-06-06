@@ -5,7 +5,7 @@ from flask import jsonify
 from flask_restx import fields
 from api import api, user_api
 from model.user import User
-from api import DataManager
+from api import data_manager
 from data.DataManager import EntityType
 
 user_model = api.model('User', {
@@ -20,7 +20,7 @@ user_model = api.model('User', {
 class UserList(Resource):
     @user_api.doc("get all users")
     def get(self):
-        return DataManager.get_list(EntityType.USER)
+        return data_manager.get_list(EntityType.USER)
 
     @user_api.doc('create user')
     @user_api.expect(user_model)
@@ -45,14 +45,14 @@ class UserList(Resource):
         first_name = data.get('first_name', '')
         last_name = data.get('last_name', '')
 
-        user_list = DataManager.get_list(EntityType.USER)
+        user_list = data_manager.get_list(EntityType.USER)
         for user in user_list:
             if user['email'] == email:
                 api.abort(409, message='Email already exists')
 
         new_user = User(email, password, first_name, last_name)
 
-        result = DataManager.save(new_user)
+        result = data_manager.save(new_user)
 
         return result
 
@@ -62,7 +62,7 @@ class UserParam(Resource):
     @user_api.doc('create user by id')
     @user_api.response(404, 'User not found')
     def get(self, user_id):
-        result = DataManager.get(user_id)
+        result = data_manager.get(user_id)
         if result is None:
             api.abort(404, message='User not found')
         else:
@@ -72,7 +72,7 @@ class UserParam(Resource):
     @user_api.response(204, 'User deleted successfully')
     @user_api.response(404, 'User not found')
     def delete(self, user_id):
-        result = DataManager.delete(user_id)
+        result = data_manager.delete(user_id)
         if result is None:
             api.abort(404, message='User not found')
         else:
@@ -89,14 +89,14 @@ class UserParam(Resource):
         if request.get_json() is None:
             user_api.bort(400, "Invalid input")
 
-        user_list = DataManager.get_list(EntityType.USER)
+        user_list = data_manager.get_list(EntityType.USER)
         for item in user_list:
             if item['email'] == data['email'] and user_id != item['id']:
                 user_api.abort(409, 'Email already exists')
 
         u = User(data['first_name'], data['last_name'], data['email'], data['password'])
         u.id = user_id
-        result = DataManager.update(u)
+        result = data_manager.update(u)
         if result is None:
             return user_api.abort(404, message='User not found')
         else:

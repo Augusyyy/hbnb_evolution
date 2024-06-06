@@ -62,18 +62,18 @@ class DataManager(IPersistenceManager):
     def delete(self, entity_id, entity_type):
         delete_data = None
         if entity_type == EntityType.USER:
-        for i in range(len(self.__user['User'])):
-            if self.__user['User'][i]['id'] == entity_id:
-                delete_data = self.__user['User'][i]
-                self.__user['User'].pop(i)
-                break
-        if delete_data is not None:
-            filename = 'data/' + EntityType.USER.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__user, indent=4))
-            return delete_data
-        else:
-            return None
+            for i in range(len(self.__user['User'])):
+                if self.__user['User'][i]['id'] == entity_id:
+                    delete_data = self.__user['User'][i]
+                    self.__user['User'].pop(i)
+                    break
+            if delete_data is not None:
+                filename = 'data/' + EntityType.USER.value + '.json'
+                with open(filename, "w") as f:
+                    f.write(json.dumps(self.__user, indent=4))
+                return delete_data
+            else:
+                return None
 
     def save(self, entity):
         if isinstance(entity, User):
