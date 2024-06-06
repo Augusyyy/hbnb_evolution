@@ -61,6 +61,7 @@ class DataManager(IPersistenceManager):
 
     def delete(self, entity_id, entity_type):
         delete_data = None
+        if entity_type == EntityType.USER:
         for i in range(len(self.__user['User'])):
             if self.__user['User'][i]['id'] == entity_id:
                 delete_data = self.__user['User'][i]
@@ -91,6 +92,7 @@ class DataManager(IPersistenceManager):
             filename = 'data/' + EntityType.USER.value + '.json'
             with open(filename, "w") as f:
                 f.write(json.dumps(self.__user, indent=4))
+            return new_entity
 
         elif isinstance(entity, Review):
             new_entity = {
@@ -108,6 +110,7 @@ class DataManager(IPersistenceManager):
             filename = 'data/' + EntityType.REVIEW.value + '.json'
             with open(filename, "w") as f:
                 f.write(json.dumps(self.__review, indent=4))   #4个缩进
+            return new_entity
 
         elif isinstance(entity, Place):
             new_entity = {
@@ -130,6 +133,7 @@ class DataManager(IPersistenceManager):
             filename = 'data/' + EntityType.PLACE.value + '.json'
             with open(filename, "w") as f:
                 f.write(json.dumps(self.__places, indent=4))
+            return new_entity
 
         elif isinstance(entity, Amenity):
             new_entity = {
@@ -144,6 +148,7 @@ class DataManager(IPersistenceManager):
             filename = 'data/' + EntityType.AMENITY.value + '.json'
             with open(filename, "w") as f:
                 f.write(json.dumps(self.__amenity, indent=4))
+            return new_entity
 
         elif isinstance(entity, Country):
             pass
@@ -162,6 +167,7 @@ class DataManager(IPersistenceManager):
             filename = 'data/' + EntityType.CITY.value + '.json'
             with open(filename, "w") as f:
                 f.write(json.dumps(self.__cities, indent=4))
+            return new_entity
 
         else:
             raise TypeError("Unsupported entity type")
