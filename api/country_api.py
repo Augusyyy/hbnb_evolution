@@ -2,7 +2,6 @@ from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
 from api import country_api
-from data import country_data
 from model.country import Country
 
 country_model = country_api.model('Country', {

@@ -2,7 +2,6 @@ from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
 from api import places_api
-from data import place_data
 from model.place import Place
 
 place_model = places_api.model('Place', {

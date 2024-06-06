@@ -7,7 +7,6 @@ from flask import jsonify
 from flask_restx import fields
 
 from api import api, user_api
-from data import user_data
 from model.user import User
 
 user_model = api.model('User', {
