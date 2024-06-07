@@ -237,7 +237,7 @@ class DataManager(IPersistenceManager):
                 if user['id'] == entity.id:
                     updated_user = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': user['created_at'],
                         'updated_at': entity.updated_at,
                         'first_name': entity.first_name,
                         'last_name': entity.last_name,
@@ -256,7 +256,7 @@ class DataManager(IPersistenceManager):
                 if review['id'] == entity.id:
                     updated_review = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': review['created_at'],
                         'updated_at': entity.updated_at,
                         'commentor_user_id': entity.commentor_user_id,
                         'place_id': entity.place_id,
@@ -275,7 +275,7 @@ class DataManager(IPersistenceManager):
                 if place['id'] == entity.id:
                     updated_place = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': place['created_at'],
                         'updated_at': entity.updated_at,
                         'name': entity.name,
                         'description': entity.description,
@@ -299,7 +299,7 @@ class DataManager(IPersistenceManager):
                 if amenity['id'] == entity.id:
                     updated_amenity = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': amenity['created_at'],
                         'updated_at': entity.updated_at,
                         'name': entity.name
                     }
@@ -315,7 +315,7 @@ class DataManager(IPersistenceManager):
                 if country['id'] == entity.id:
                     updated_country = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': country['created_at'],
                         'updated_at': entity.updated_at,
                         'name': entity.name,
                         'code': entity.code
@@ -332,7 +332,7 @@ class DataManager(IPersistenceManager):
                 if city['id'] == entity.id:
                     updated_city = {
                         'id': entity.id,
-                        'created_at': entity.created_at,
+                        'created_at': city['created_at'],
                         'updated_at': entity.updated_at,
                         'country_id': entity.country_id,
                         'name': entity.name
@@ -392,7 +392,7 @@ class DataManager(IPersistenceManager):
             return self.__user['User']
         elif entity_type == EntityType.AMENITY:
             return self.__amenity['AMENITY']
-        elif entity_type == EntityType.City:
+        elif entity_type == EntityType.CITY:
             return self.__cities['City']
         else:
             raise TypeError("Unsupported entity type")

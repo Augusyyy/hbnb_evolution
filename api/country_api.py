@@ -5,7 +5,6 @@ from api import country_api
 from model.country import Country
 
 country_model = country_api.model('Country', {
-    'id': fields.String(required=True, description='County id'),
     'name': fields.String(required=True, description='Country name'),
     'code': fields.String(required=True, description='Country code')
 })

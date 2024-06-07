@@ -6,7 +6,6 @@ from model.review import Review
 
 
 review_model = reviews_api.model ('Review', {
-    'id': fields.String(required=True, description='Review id'),
     'comment_user_id': fields.String(required=True, description='comment user id'),
     'place_id': fields.String(required=True, description='place id'),
     'feedback': fields.String(required=True, description='feedback'),
