@@ -62,7 +62,7 @@ class UserParam(Resource):
     @user_api.doc('create user by id')
     @user_api.response(404, 'User not found')
     def get(self, user_id):
-        result = data_manager.get(user_id)
+        result = data_manager.get(user_id, EntityType.USER)
         if result is None:
             api.abort(404, message='User not found')
         else:
@@ -72,7 +72,7 @@ class UserParam(Resource):
     @user_api.response(204, 'User deleted successfully')
     @user_api.response(404, 'User not found')
     def delete(self, user_id):
-        result = data_manager.delete(user_id)
+        result = data_manager.delete(user_id, EntityType.USER)
         if result is None:
             api.abort(404, message='User not found')
         else:
