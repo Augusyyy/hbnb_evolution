@@ -26,12 +26,12 @@ class DataManager(IPersistenceManager):
     def __init__(self):
         """init attribute in memory
         attribute is private"""
-        self.__user = {}
         self.__countries = {}
         self.__cities = {}
         self.__places = {}
         self.__amenity = {}
         self.__review = {}
+        self.__user = {}
 
         """from json file load data 
                 save in attribute"""
@@ -147,10 +147,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__user['User'].append(new_entity)
-            # flush json file
-            filename = 'data/' + EntityType.USER.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__user, indent=4))
+            self.save_data('data/user.json', self.__user)
             return new_entity
 
         elif isinstance(entity, Review):
@@ -165,10 +162,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__review['Review'].append(new_entity)
-            # flush json file
-            filename = 'data/' + EntityType.REVIEW.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__review, indent=4))   #4个缩进
+            self.save_data('data/user.json', self.__user)
             return new_entity
 
         elif isinstance(entity, Place):
@@ -188,10 +182,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__places['Place'].append(new_entity)
-            # flush json file
-            filename = 'data/' + EntityType.PLACE.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__places, indent=4))
+            self.save_data('data/user.json', self.__user)
             return new_entity
 
         elif isinstance(entity, Amenity):
@@ -203,10 +194,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__amenity['Amenity'].append(new_entity)
-            # flush json file
-            filename = 'data/' + EntityType.AMENITY.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__amenity, indent=4))
+            self.save_data('data/user.json', self.__user)
             return new_entity
 
         elif isinstance(entity, Country):
@@ -222,14 +210,16 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__cities['Cities'].append(new_entity)
-            # flush json file
-            filename = 'data/' + EntityType.CITY.value + '.json'
-            with open(filename, "w") as f:
-                f.write(json.dumps(self.__cities, indent=4))
+            self.save_data('data/user.json', self.__user)
             return new_entity
 
         else:
             raise TypeError("Unsupported entity type")
+
+
+    def save_data(self, filename, data):
+        with open(filename, "w") as f:
+            f.write(json.dumps(data, indent=4))
 
     def update(self, entity):
         if isinstance(entity, User):
@@ -245,9 +235,7 @@ class DataManager(IPersistenceManager):
                         'password': entity.password
                     }
                     self.__user['User'][idx] = updated_user
-                    filename = 'data/' + EntityType.USER.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__user, indent=4))
+                    self.save_data('data/user.json', self.__user)
                     return updated_user
             return None
 
@@ -264,10 +252,7 @@ class DataManager(IPersistenceManager):
                         'rating': entity.rating
                     }
                     self.__review['Review'][idx] = updated_review
-                    filename = 'data/' + EntityType.REVIEW.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__review, indent=4))
-                    return updated_review
+                    self.save_data('data/user.json', self.__user)
             return None
 
         elif isinstance(entity, Place):
@@ -288,10 +273,7 @@ class DataManager(IPersistenceManager):
                         'max_guests': entity.max_guests
                     }
                     self.__places['Place'][idx] = updated_place
-                    filename = 'data/' + EntityType.PLACE.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__places, indent=4))
-                    return updated_place
+                    self.save_data('data/user.json', self.__user)
             return None
 
         elif isinstance(entity, Amenity):
@@ -304,10 +286,7 @@ class DataManager(IPersistenceManager):
                         'name': entity.name
                     }
                     self.__amenity['Amenity'][idx] = updated_amenity
-                    filename = 'data/' + EntityType.AMENITY.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__amenity, indent=4))
-                    return updated_amenity
+                    self.save_data('data/user.json', self.__user)
             return None
 
         elif isinstance(entity, Country):
@@ -321,10 +300,7 @@ class DataManager(IPersistenceManager):
                         'code': entity.code
                     }
                     self.__countries['Country'][idx] = updated_country
-                    filename = 'data/' + EntityType.COUNTRY.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__countries, indent=4))
-                    return updated_country
+                    self.save_data('data/user.json', self.__user)
             return None
 
         elif isinstance(entity, City):
@@ -338,10 +314,7 @@ class DataManager(IPersistenceManager):
                         'name': entity.name
                     }
                     self.__cities['City'][idx] = updated_city
-                    filename = 'data/' + EntityType.CITY.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__cities, indent=4))
-                    return updated_city
+                    self.save_data('data/user.json', self.__user)
             return None
 
         else:

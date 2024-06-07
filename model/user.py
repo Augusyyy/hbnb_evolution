@@ -47,4 +47,3 @@ class User:
     def password(self, value):
         self.__password = value
         self.updated_at = datetime.now().timestamp()
-
