@@ -21,6 +21,11 @@ class EntityType(Enum):
     CITY = "city"
 
 
+def save_data(filename, data):
+    with open(filename, "w") as f:
+        f.write(json.dumps(data, indent=4))
+
+
 class DataManager(IPersistenceManager):
 
     def __init__(self):
@@ -68,9 +73,7 @@ class DataManager(IPersistenceManager):
                     self.__user['User'].pop(i)
                     break
             if delete_data is not None:
-                filename = 'data/' + EntityType.USER.value + '.json'
-                with open(filename, "w") as f:
-                    f.write(json.dumps(self.__user, indent=4))
+                save_data('data/user.json', self.__user)
                 return delete_data
             else:
                 return None
@@ -79,16 +82,14 @@ class DataManager(IPersistenceManager):
             pass
 
         elif entity_type == EntityType.PLACE:
-            for i in range(len(self.__countries['Country'])):
-                if self.__countries['Country'][i]['id'] == entity_id:
-                    delete_data = self.__countries['Country'][i]
-                    self.__countries['Country'].pop(i)
+            for i in range(len(self.__cities['Place'])):
+                if self.__cities['Place'][i]['id'] == entity_id:
+                    delete_data = self.__cities['Place'][i]
+                    self.__cities['Place'].pop(i)
                     break
-                if delete_data is not None:
-                    filename = 'data/' + EntityType.PLACE.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__countries, indent=4))
-                        return delete_data
+            if delete_data is not None:
+                save_data('data/place.json', self.__places)
+                return delete_data
             else:
                 return None
 
@@ -98,11 +99,9 @@ class DataManager(IPersistenceManager):
                     delete_data = self.__review['Review'][i]
                     self.__review['Review'].pop(i)
                     break
-                if delete_data is not None:
-                    filename = 'data/' + EntityType.REVIEW.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__review, indent=4))
-                        return delete_data
+            if delete_data is not None:
+                save_data('data/review.json', self.__review)
+                return delete_data
             else:
                 return None
 
@@ -112,11 +111,9 @@ class DataManager(IPersistenceManager):
                     delete_data = self.__amenity['Amenity'][i]
                     self.__amenity['Amenity'].pop(i)
                     break
-                if delete_data is not None:
-                    filename = 'data/' + EntityType.AMENITY.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__amenity, indent=4))
-                        return delete_data
+            if delete_data is not None:
+                save_data('data/amenity.json', self.__amenity)
+                return delete_data
             else:
                 return None
 
@@ -126,11 +123,9 @@ class DataManager(IPersistenceManager):
                     delete_data = self.__cities['City'][i]
                     self.__cities['City'].pop(i)
                     break
-                if delete_data is not None:
-                    filename = 'data/' + EntityType.CITY.value + '.json'
-                    with open(filename, "w") as f:
-                        f.write(json.dumps(self.__cities, indent=4))
-                        return delete_data
+            if delete_data is not None:
+                save_data('data/city.json', self.__cities)
+                return delete_data
             else:
                 return None
 
@@ -147,7 +142,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__user['User'].append(new_entity)
-            self.save_data('data/user.json', self.__user)
+            save_data('data/user.json', self.__user)
             return new_entity
 
         elif isinstance(entity, Review):
@@ -162,7 +157,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__review['Review'].append(new_entity)
-            self.save_data('data/user.json', self.__user)
+            save_data('data/review.json', self.__review)
             return new_entity
 
         elif isinstance(entity, Place):
@@ -182,7 +177,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__places['Place'].append(new_entity)
-            self.save_data('data/user.json', self.__user)
+            save_data('data/place.json', self.__places)
             return new_entity
 
         elif isinstance(entity, Amenity):
@@ -194,7 +189,7 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__amenity['Amenity'].append(new_entity)
-            self.save_data('data/user.json', self.__user)
+            save_data('data/amenity.json', self.__amenity)
             return new_entity
 
         elif isinstance(entity, Country):
@@ -210,16 +205,12 @@ class DataManager(IPersistenceManager):
             }
             # add data to memory
             self.__cities['Cities'].append(new_entity)
-            self.save_data('data/user.json', self.__user)
+            save_data('data/city.json', self.__cities)
             return new_entity
 
         else:
             raise TypeError("Unsupported entity type")
 
-
-    def save_data(self, filename, data):
-        with open(filename, "w") as f:
-            f.write(json.dumps(data, indent=4))
 
     def update(self, entity):
         if isinstance(entity, User):
@@ -235,7 +226,7 @@ class DataManager(IPersistenceManager):
                         'password': entity.password
                     }
                     self.__user['User'][idx] = updated_user
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/user.json', self.__user)
                     return updated_user
             return None
 
@@ -252,7 +243,7 @@ class DataManager(IPersistenceManager):
                         'rating': entity.rating
                     }
                     self.__review['Review'][idx] = updated_review
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/review.json', self.__review)
             return None
 
         elif isinstance(entity, Place):
@@ -273,7 +264,7 @@ class DataManager(IPersistenceManager):
                         'max_guests': entity.max_guests
                     }
                     self.__places['Place'][idx] = updated_place
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/place.json', self.__places)
             return None
 
         elif isinstance(entity, Amenity):
@@ -286,7 +277,7 @@ class DataManager(IPersistenceManager):
                         'name': entity.name
                     }
                     self.__amenity['Amenity'][idx] = updated_amenity
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/amenity.json', self.__amenity)
             return None
 
         elif isinstance(entity, Country):
@@ -300,7 +291,7 @@ class DataManager(IPersistenceManager):
                         'code': entity.code
                     }
                     self.__countries['Country'][idx] = updated_country
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/country.json', self.__countries)
             return None
 
         elif isinstance(entity, City):
@@ -314,7 +305,7 @@ class DataManager(IPersistenceManager):
                         'name': entity.name
                     }
                     self.__cities['City'][idx] = updated_city
-                    self.save_data('data/user.json', self.__user)
+                    save_data('data/city.json', self.__cities)
             return None
 
         else:
