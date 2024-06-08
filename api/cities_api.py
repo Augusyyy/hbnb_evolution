@@ -36,16 +36,6 @@ class NewCity(Resource):
         if not country_exists:
             return {'message': 'Invalid country ID'}, 400
 
-        countries = data_manager.get_list(EntityType.COUNTRY)
-        country_exists = False
-        for country in countries:
-            if country['id'] == country_id:
-                country_exists = True
-                break
-
-        if not country_exists:
-            return {'message': 'Invalid country ID'}, 400
-
         cities = data_manager.get_list(EntityType.CITY)
         for city in cities:
             if city['name'] == name and city['country_id'] == country_id:
@@ -61,7 +51,7 @@ class NewCity(Resource):
             'created_at': datetime.utcnow().isoformat(),
             'updated_at': datetime.utcnow().isoformat()
         }
-        data_manager.save(new_city, EntityType.CITY)
+        data_manager.save(EntityType.CITY)
         return new_city, 201
 
 
@@ -85,7 +75,6 @@ class Cities(Resource):
     @cities_api.expect(city_model)
     def put(self, city_id):
         json_data = request.get_json()
-
         name = json_data.get('name')
         country_id = json_data.get('country_id')
 
