@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
+
+import data
 from api import cities_api, api
 from data.DataManager import DataManager, EntityType
 from model.city import City
@@ -19,12 +21,18 @@ class NewCity(Resource):
     @cities_api.expect(city_model)
     @cities_api.doc('creat new city')
     def post(self):
-        json_data = request.get_json()
-        name = json_data.get('name')
-        country_id = json_data.get('country_id')
+        if not request.json:
+            api.abort(400, message='Invalid input')
+
+        data = request.get_json()
+        if data is None:
+            api.abort(400, message='Invalid input')
+
+        name = data.get('name')
+        country_id = data.get('country_id')
 
         if not name or not country_id:
-            return jsonify('Missing required field'), 400
+            return {'message': 'Missing required field'}, 400
 
         countries = data_manager.get_list(EntityType.COUNTRY)
         country_exists = False
@@ -41,19 +49,9 @@ class NewCity(Resource):
             if city['name'] == name and city['country_id'] == country_id:
                 return {'message': 'City name already exists in this country'}, 409
 
-        global city_id_counter
-        city_id = str(city_id_counter)
-        city_id_counter += 1
-        new_city = {
-            'id': city_id,
-            'name': name,
-            'country_id': country_id,
-            'created_at': datetime.utcnow().isoformat(),
-            'updated_at': datetime.utcnow().isoformat()
-        }
-        data_manager.save(EntityType.CITY)
-        return new_city, 201
-
+        new_city = City(name, country_id)
+        result = data_manager.save(new_city)
+        return result, 201
 
     @cities_api.doc('Retrieve all cities.')
     def get(self):
@@ -79,7 +77,7 @@ class Cities(Resource):
         country_id = json_data.get('country_id')
 
         if not name or not country_id:
-            return jsonify('Missing required field'), 400
+            api.abort(400, message='Invalid input')
 
         countries = data_manager.get_list(EntityType.COUNTRY)
 
@@ -105,13 +103,15 @@ class Cities(Resource):
 
         for city in cities:
             if city['name'] == name and city['country_id'] == country_id and city['id'] != country_id:
-                return {'message': 'City name already exists in this country'}, 409
+                api.abort(409, message='City name already exists in this country')
 
-        updated_city = City(name, country_id)
-        updated_city.id = city_id
-
-        data_manager.update(city_update)
-        return city_update, 200
+        c = City(data['name'], data['country_id'])
+        c.id = city_id
+        result = data_manager.update(c)
+        if result is None:
+            return api.abort(400, message='Failed to update city')
+        else:
+            return result, 200
 
     @cities_api.doc('Delete a specific city')
     def delete(self, city_id):
