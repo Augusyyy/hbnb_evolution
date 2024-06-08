@@ -36,6 +36,25 @@ class CountriesByCode(Resource):
 @country_api.route('/<string:country_code>/cities')
 class CountryCities(Resource):
     @country_api.doc('get_country_cities')
-    def get(self, country_code):
-        pass
+    def get(self, country_id):
+        all_countries = data_manager.get_list(EntityType.COUNTRY)
 
+        country_found = None
+        for country in all_countries:
+            if country['id'] == country_id:
+                country_found = country
+                break
+
+        if country_found is None:
+            api.abort(404, message='Country not found')
+
+        all_cities = data_manager.get_list(EntityType.COUNTRY)
+        cities_in_country = []
+        for city in all_cities:
+            if city['country_id'] == country_found['id']:
+                cities_in_country.append(city)
+
+        if cities_in_country:
+            return cities_in_country, 200
+        else:
+            api.abort(404, message='No cities found in this country')
