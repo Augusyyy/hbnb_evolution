@@ -17,7 +17,7 @@ class CountryList(Resource):
     def get(self):
         countries = data_manager.get_list(EntityType.COUNTRY)
         if countries:
-            return jsonify(countries), 200
+            return countries, 200
         api.abort(404, message='No countries found')
 
 
@@ -28,7 +28,7 @@ class CountriesByCode(Resource):
         countries = data_manager.get_list(EntityType.COUNTRY)
         for country in countries:
             if country['code'] == country_code:
-                return jsonify(country), 200
+                return country, 200
             else:
                 return api.abort(404, message='Country not found')
 
@@ -36,12 +36,12 @@ class CountriesByCode(Resource):
 @country_api.route('/<string:country_code>/cities')
 class CountryCities(Resource):
     @country_api.doc('get_country_cities')
-    def get(self, country_id):
+    def get(self, country_code):
         all_countries = data_manager.get_list(EntityType.COUNTRY)
 
         country_found = None
         for country in all_countries:
-            if country['id'] == country_id:
+            if country['code'] == country_code:
                 country_found = country
                 break
 
