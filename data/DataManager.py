@@ -211,7 +211,6 @@ class DataManager(IPersistenceManager):
         else:
             raise TypeError("Unsupported entity type")
 
-
     def update(self, entity):
         if isinstance(entity, User):
             for idx, user in enumerate(self.__user['User']):
