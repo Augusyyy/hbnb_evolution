@@ -158,9 +158,9 @@ class DataManager(IPersistenceManager):
                 'id': entity.id,
                 'created_at': entity.created_at,
                 'updated_at': entity.updated_at,
-                'commentor_user_id': entity.commentor_user_id,
+                'commentor_user_id': entity.user_id,
                 'place_id': entity.place_id,
-                'feedback': entity.feedback,
+                'feedback': entity.comment,
                 'rating': entity.rating
             }
             # add data to memory

@@ -196,10 +196,10 @@ class PLaceReviews(Resource):
             api.abort(400, message='Invalid input')
 
         user_id = data.get('user_id')
-        feedback = data.get('feedback')
+        comment = data.get('comment')
         rating = data.get('rating')
 
-        if not (user_id and feedback and rating is not None):
+        if not (user_id and comment and rating is not None):
             api.abort(400, message='Missing required field')
 
         if not (isinstance(rating, int) and 0 <= rating <= 5):
@@ -209,7 +209,7 @@ class PLaceReviews(Resource):
         if place is None:
             api.abort(404, message='Place not found')
 
-        new_review = Review(user_id, place_id, feedback, rating)
+        new_review = Review(user_id, place_id, comment, rating)
         result = data_manager.save(new_review)
         return result, 201
 
