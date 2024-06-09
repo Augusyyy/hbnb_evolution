@@ -105,13 +105,12 @@ class Cities(Resource):
             if city['name'] == name and city['country_id'] == country_id and city['id'] != country_id:
                 api.abort(409, message='City name already exists in this country')
 
-        c = City(data['name'], json_data.get('country_id'))
-        c.id = city_id
-        result = data_manager.update(c)
+        updated_city = City(name, country_id)
+        updated_city.id = city_id
+        result = data_manager.update(updated_city)
         if result is None:
-            return api.abort(400, message='Failed to update city')
-        else:
-            return result, 200
+            api.abort(400, message='Failed to update city')
+        return result, 200
 
     @cities_api.doc('Delete a specific city')
     def delete(self, country_id):

@@ -15,7 +15,7 @@ class NewAmenity(Resource):
     @amenities_api.expect(amenity_model)
     @amenities_api.doc('create_amenity')
     def post(self):
-        if not request.is_json:
+        if not request.json:
             api.abort(400, message='Invalid input')
 
         data = request.get_json()
@@ -26,11 +26,10 @@ class NewAmenity(Resource):
         if not name:
             api.abort(400, message='Missing required field')
 
-        new_amenity = Amenity(name=name)
-        result = data_manager.get_list(EntityType.AMENITY)
-        for amenity in amenities_api:
+        amenities = data_manager.get_list(EntityType.AMENITY)
+        for amenity in amenities:
             if amenity['name'] == name:
-                api.abort(400, message='Amenity name already exists')
+                api.abort(409, message='Amenity name already exists')
 
         new_amenity = Amenity(name)
         result = data_manager.save(new_amenity)
@@ -55,7 +54,30 @@ class EditAmenity(Resource):
     @amenities_api.doc('update inform about an amenity')
     @amenities_api.expect(amenity_model)
     def put(self, amenity_id):
-        pass
+        if not request.json:
+            api.abort(400, message='Invalid input')
+        data = request.get_json()
+        if data is None:
+            api.abort(400, message='Invalid input')
+        name = data.get('name')
+        if not name:
+            api.abort(400, message='Missing required field')
+
+        amenity_to_update = data_manager.get(amenity_id, EntityType.AMENITY)
+        if amenity_to_update is None:
+            api.abort(404, message='Amenity not found')
+
+        amenities = data_manager.get_list(EntityType.AMENITY)
+        for amenity in amenities:
+            if amenity['name'] == name and amenity['id'] != amenity_id:
+                api.abort(409, message='Amenity name already exists')
+
+        updated_amenity = Amenity(name)
+        updated_amenity.id = amenity_id
+        result = data_manager.update(updated_amenity)
+        if result is None:
+            api.abort(400, message='Failed to update amenity')
+        return result, 200
 
     @amenities_api.doc('delete a specific amenity')
     def delete(self, amenity_id):

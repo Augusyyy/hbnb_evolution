@@ -356,7 +356,7 @@ class DataManager(IPersistenceManager):
         elif entity_type == EntityType.USER:
             return self.__user['User']
         elif entity_type == EntityType.AMENITY:
-            return self.__amenity['AMENITY']
+            return self.__amenity['Amenity']
         elif entity_type == EntityType.CITY:
             return self.__cities['City']
         else:
