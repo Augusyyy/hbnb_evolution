@@ -204,7 +204,7 @@ class DataManager(IPersistenceManager):
                 'name': entity.name
             }
             # add data to memory
-            self.__cities['Cities'].append(new_entity)
+            self.__cities['City'].append(new_entity)
             save_data('data/city.json', self.__cities)
             return new_entity
 

@@ -31,7 +31,25 @@ class EditAmenity(Resource):
     @amenities_api.doc('update inform about an amenity')
     @amenities_api.expect(amenity_model)
     def put(self, amenity_id):
-        pass
+        if not request.is_json:
+            api.abort(400, message='Invalid input')
+
+        data = request.get_json()
+        if data is None:
+            api.abort(400, message='Invalid input')
+
+        name = data.get('name')
+        if not name:
+            api.abort(400, message='Missing required field')
+
+        new_amenity = Amenity(name=name)
+        result = data_manager.get_list(EntityType.AMENITY)
+        for amenity in amenities_api:
+            if amenity['name'] == name:
+                api.abort(400, message='Amenity name already exists')
+
+
+
 
     @amenities_api.doc('delete a specific amenity')
     def delete(self, amenity_id):
