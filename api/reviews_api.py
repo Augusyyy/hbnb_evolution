@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import reviews_api, api
+from api import reviews_api, api, data_manager
 from data.DataManager import DataManager, EntityType
 from model.review import Review
 
@@ -12,8 +12,6 @@ review_model = reviews_api.model('Review', {
     'feedback': fields.String(required=True, description='feedback'),
     'rating': fields.Float(required=True, description='rating')
 })
-
-data_manager = DataManager()
 
 
 @reviews_api.route("/<string:review_id>")

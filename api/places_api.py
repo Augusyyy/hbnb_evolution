@@ -6,6 +6,14 @@ from data.DataManager import DataManager, EntityType
 from model.place import Place
 from model.review import Review
 
+
+review_model = places_api.model('Review', {
+    'comment_user_id': fields.String(required=True, description='comment user id'),
+    'place_id': fields.String(required=True, description='place id'),
+    'feedback': fields.String(required=True, description='feedback'),
+    'rating': fields.Float(required=True, description='rating')
+})
+
 place_model = places_api.model('Place', {
     'host_user_id': fields.String(required=True, description='Host user id'),
     'name': fields.String(required=True, description='Hotel name'),
@@ -19,8 +27,6 @@ place_model = places_api.model('Place', {
     'price_per_night': fields.Integer(required=True, description='Price per night'),
     'max_guests': fields.Integer(required=True, description='Maximum guests')
 })
-
-datamanager = DataManager()
 
 
 @places_api.route("/")

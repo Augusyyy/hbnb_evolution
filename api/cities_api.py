@@ -3,7 +3,7 @@ from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
 
 import data
-from api import cities_api, api
+from api import cities_api, api, data_manager
 from data.DataManager import DataManager, EntityType
 from model.city import City
 
@@ -12,8 +12,6 @@ city_model = cities_api.model('City', {
     'name': fields.String(required=True, description='City name')
 })
 
-data_manager = DataManager()
-citi_id_counter = 1
 
 
 @cities_api.route("/")
