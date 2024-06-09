@@ -6,11 +6,11 @@ from data.DataManager import DataManager, EntityType
 from model.review import Review
 
 
-review_model = reviews_api.model ('Review', {
+review_model = reviews_api.model('Review', {
     'comment_user_id': fields.String(required=True, description='comment user id'),
     'place_id': fields.String(required=True, description='place id'),
     'feedback': fields.String(required=True, description='feedback'),
-    'rating': fields.Integer(required=True, description='rating')
+    'rating': fields.Float(required=True, description='rating')
 })
 
 data_manager = DataManager()
@@ -43,7 +43,7 @@ class EditReview(Resource):
         if not (commentor_user_id and feedback and rating is not None):
             api.abort(400, message='Missing required field')
 
-        if not (isinstance(rating, int) and 1 <= rating <= 5):
+        if not (isinstance(rating, (int, float)) and 1 <= rating <= 5):
             api.abort(400, message='Invalid rating value')
 
         review_to_update = review_model.get(review_id, EntityType.REVIEW)

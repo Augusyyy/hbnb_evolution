@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import places_api, api, data_manager
+from api import places_api, api, data_manager, review_model
 from data.DataManager import DataManager, EntityType
 from model.place import Place
 from model.review import Review
@@ -14,10 +14,10 @@ place_model = places_api.model('Place', {
     'address': fields.String(required=True, description='Hotel address'),
     'latitude': fields.String(required=True, description='Latitude'),
     'longitude': fields.String(required=True, description='Longitude'),
-    'number_of_rooms' : fields.Integer(required=True, description='Number of rooms'),
-    'bathrooms' : fields.Integer(required=True, description='Number of bathrooms'),
-    'price_per_night' : fields.Integer(required=True, description='Price per night'),
-    'max_guests' : fields.Integer(required=True, description='Maximum guests')
+    'number_of_rooms': fields.Integer(required=True, description='Number of rooms'),
+    'bathrooms': fields.Integer(required=True, description='Number of bathrooms'),
+    'price_per_night': fields.Integer(required=True, description='Price per night'),
+    'max_guests': fields.Integer(required=True, description='Maximum guests')
 })
 
 datamanager = DataManager()
@@ -81,7 +81,8 @@ class NewPlace(Resource):
             if place['name'] == name:
                 api.abort(409, message='Place name already exists')
 
-        new_place = Place(host_user_id, name, city_id, description, address, latitude, longitude, number_of_rooms, bathrooms, price_per_night, max_guests)
+        new_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms,
+                          bathrooms, price_per_night, max_guests)
         result = data_manager.save(new_place)
         return result, 201
 
@@ -160,7 +161,7 @@ class EditPlace(Resource):
             if place['name'] == name and place['id'] != place_id:
                 api.abort(409, message='Place name already exists')
 
-        updated_place = Place(host_user_id, name, city_id, description, address, latitude, longitude, number_of_rooms, bathrooms, price_per_night, max_guests)
+        updated_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms, bathrooms, price_per_night, max_guests)
         updated_place.id = place_id
         result = data_manager.update(updated_place)
         if result is None:
@@ -178,7 +179,7 @@ class EditPlace(Resource):
 
 @places_api.route('/<string:place_id>/reviews')
 class PLaceReviews(Resource):
-    @places_api.expect(place_model)
+    @places_api.expect(review_model)
     @places_api.doc('new reviews for a place')
     def post(self, place_id):
         if not request.json:

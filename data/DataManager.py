@@ -78,11 +78,23 @@ class DataManager(IPersistenceManager):
             else:
                 return None
 
+        elif entity_type == EntityType.CITY:
+            for i in range(len(self.__cities['City'])):
+                if self.__cities['City'][i]['id'] == entity_id:
+                    delete_data = self.__cities['City'][i]
+                    self.__cities['City'].pop(i)
+                    break
+            if delete_data is not None:
+                save_data('data/city.json', self.__cities)
+                return delete_data
+            else:
+                return None
+
         elif entity_type == EntityType.PLACE:
-            for i in range(len(self.__cities['Place'])):
-                if self.__cities['Place'][i]['id'] == entity_id:
-                    delete_data = self.__cities['Place'][i]
-                    self.__cities['Place'].pop(i)
+            for i in range(len(self.__places['Place'])):
+                if self.__places['Place'][i]['id'] == entity_id:
+                    delete_data = self.__places['Place'][i]
+                    self.__places['Place'].pop(i)
                     break
             if delete_data is not None:
                 save_data('data/place.json', self.__places)
@@ -113,7 +125,6 @@ class DataManager(IPersistenceManager):
                 return delete_data
             else:
                 return None
-
         elif entity_type == EntityType.CITY:
             for i in range(len(self.__cities['City'])):
                 if self.__cities['City'][i]['id'] == entity_id:
@@ -162,6 +173,7 @@ class DataManager(IPersistenceManager):
                 'id': entity.id,
                 'created_at': entity.created_at,
                 'updated_at': entity.updated_at,
+                'host_user_id': entity.host_user_id,
                 'name': entity.name,
                 'description': entity.description,
                 'address': entity.address,
@@ -250,6 +262,7 @@ class DataManager(IPersistenceManager):
                         'id': entity.id,
                         'created_at': place['created_at'],
                         'updated_at': entity.updated_at,
+                        'host_user_id': entity.host_user_id,  # 补充字段
                         'name': entity.name,
                         'description': entity.description,
                         'address': entity.address,
