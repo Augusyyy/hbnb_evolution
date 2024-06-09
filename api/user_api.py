@@ -107,4 +107,10 @@ class UserParam(Resource):
 class UserReview(Resource):
     @user_api.doc('all the reviews for a user')
     def get(self, user_id):
-        pass
+        user = data_manager.get(user_id, EntityType.USER)
+        if user is None:
+            api.abort(404, message='User not found')
+
+        reviews = data_manager.get_list(EntityType.REVIEW)
+        user_reviews = [review for review in reviews if review['commentor_user_id'] == user_id]
+        return user_reviews, 200

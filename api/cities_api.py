@@ -32,7 +32,7 @@ class NewCity(Resource):
         country_id = data.get('country_id')
 
         if not name or not country_id:
-            return {'message': 'Missing required field'}, 400
+            api.abort(400, message='Missing required field')
 
         countries = data_manager.get_list(EntityType.COUNTRY)
         country_exists = False
@@ -42,12 +42,12 @@ class NewCity(Resource):
                 break
 
         if not country_exists:
-            return {'message': 'Invalid country ID'}, 400
+            api.abort(400, message='Missing required field')
 
         cities = data_manager.get_list(EntityType.CITY)
         for city in cities:
             if city['name'] == name and city['country_id'] == country_id:
-                return {'message': 'City name already exists in this country'}, 409
+                api.abort(400, message='Missing required field')
 
         new_city = City(name, country_id)
         result = data_manager.save(new_city)
@@ -67,7 +67,7 @@ class Cities(Resource):
         for city in cities:
             if city['id'] == city_id:
                 return city, 200
-        return {'message': 'City not found'}, 404
+        api.abort(400, message='Missing required field')
 
     @cities_api.doc('Update an existing cities inform')
     @cities_api.expect(city_model)
@@ -88,7 +88,7 @@ class Cities(Resource):
                 break
 
         if not country_exists:
-            return {'message': 'Invalid country ID'}, 400
+            api.abort(400, message='Invalid country ID')
 
         cities = data_manager.get_list(EntityType.CITY)
         city_update = None
@@ -99,7 +99,7 @@ class Cities(Resource):
                 break
 
         if city_update is None:
-            return {'message': 'City not found'}, 404
+            api.abort(400, message='City not found')
 
         for city in cities:
             if city['name'] == name and city['country_id'] == country_id and city['id'] != country_id:
@@ -113,9 +113,9 @@ class Cities(Resource):
         return result, 200
 
     @cities_api.doc('Delete a specific city')
-    def delete(self, country_id):
-        result = data_manager.delete(country_id, EntityType.CITY)
+    def delete(self, city_id):
+        result = data_manager.delete(city_id, EntityType.CITY)
         if result is None:
             api.abort(404, message='User not found')
         else:
-            return jsonify({"message": "deleted successfully"})
+            return {"message": "deleted successfully"}

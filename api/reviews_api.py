@@ -36,24 +36,26 @@ class EditReview(Resource):
         if data is None:
             api.abort(400, message='Invalid input')
 
-        coment_user_id = data.get('comment_user_id')
-        place_id = data.get('place_id')
+        commentor_user_id = data.get('commentor_user_id')
         feedback = data.get('feedback')
         rating = data.get('rating')
 
-        if not coment_user_id or not place_id or not feedback or rating is None:
-            api.abort(400, message='Missing input')
+        if not (commentor_user_id and feedback and rating is not None):
+            api.abort(400, message='Missing required field')
+
+        if not (isinstance(rating, int) and 1 <= rating <= 5):
+            api.abort(400, message='Invalid rating value')
 
         review_to_update = review_model.get(review_id, EntityType.REVIEW)
         if review_to_update is None:
             api.abort(404, message='Review not found')
 
-        update_review = Review(coment_user_id, place_id, feedback, rating)
-        update_review.id = review_id
-        result = data_manager.update(update_review)
+        updated_review = Review(commentor_user_id, review_to_update['place_id'], feedback, rating)
+        updated_review.id = review_id
 
+        result = data_manager.update(updated_review)
         if result is None:
-            api.abort(404, message='Failed to update review')
+            api.abort(400, message='Failed to update review')
         return result, 200
 
     @reviews_api.doc('delete review')
@@ -63,4 +65,3 @@ class EditReview(Resource):
             api.abort(404, message='Review not found')
         else:
             return jsonify({"message": "deleted successfully"})
-        
