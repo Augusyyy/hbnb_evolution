@@ -8,9 +8,9 @@ from model.review import Review
 
 
 review_model = places_api.model('Review', {
-    'comment_user_id': fields.String(required=True, description='comment user id'),
+    'user_id': fields.String(required=True, description='user id'),
     'place_id': fields.String(required=True, description='place id'),
-    'feedback': fields.String(required=True, description='feedback'),
+    'comment': fields.String(required=True, description='comment'),
     'rating': fields.Float(required=True, description='rating')
 })
 
@@ -195,11 +195,11 @@ class PLaceReviews(Resource):
         if data is None:
             api.abort(400, message='Invalid input')
 
-        commentor_user_id = data.get('commentor_user_id')
+        user_id = data.get('user_id')
         feedback = data.get('feedback')
         rating = data.get('rating')
 
-        if not (commentor_user_id and feedback and rating is not None):
+        if not (user_id and feedback and rating is not None):
             api.abort(400, message='Missing required field')
 
         if not (isinstance(rating, int) and 0 <= rating <= 5):
@@ -209,7 +209,7 @@ class PLaceReviews(Resource):
         if place is None:
             api.abort(404, message='Place not found')
 
-        new_review = Review(commentor_user_id, place_id, feedback, rating)
+        new_review = Review(user_id, place_id, feedback, rating)
         result = data_manager.save(new_review)
         return result, 201
 

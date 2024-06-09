@@ -112,5 +112,5 @@ class UserReview(Resource):
             api.abort(404, message='User not found')
 
         reviews = data_manager.get_list(EntityType.REVIEW)
-        user_reviews = [review for review in reviews if review['commentor_user_id'] == user_id]
+        user_reviews = [review for review in reviews if review['user_id'] == user_id]
         return user_reviews, 200

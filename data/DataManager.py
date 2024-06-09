@@ -245,9 +245,9 @@ class DataManager(IPersistenceManager):
                         'id': entity.id,
                         'created_at': review['created_at'],
                         'updated_at': entity.updated_at,
-                        'commentor_user_id': entity.commentor_user_id,
+                        'user_id': entity.user_id,
                         'place_id': entity.place_id,
-                        'feedback': entity.feedback,
+                        'comment': entity.comment,
                         'rating': entity.rating
                     }
                     self.__review['Review'][idx] = updated_review
