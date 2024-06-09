@@ -15,22 +15,6 @@ class NewAmenity(Resource):
     @amenities_api.expect(amenity_model)
     @amenities_api.doc('create_amenity')
     def post(self):
-        pass
-
-    @amenities_api.doc('list of all amenities')
-    def get(self):
-        pass
-
-
-@amenities_api.route("/<string:amenity_id>")
-class EditAmenity(Resource):
-    @amenities_api.doc('get inform about an amenity')
-    def get(self, amenity_id):
-        pass
-
-    @amenities_api.doc('update inform about an amenity')
-    @amenities_api.expect(amenity_model)
-    def put(self, amenity_id):
         if not request.is_json:
             api.abort(400, message='Invalid input')
 
@@ -48,8 +32,30 @@ class EditAmenity(Resource):
             if amenity['name'] == name:
                 api.abort(400, message='Amenity name already exists')
 
+        new_amenity = Amenity(name)
+        result = data_manager.save(new_amenity)
+        return result, 201
+
+    @amenities_api.doc('list of all amenities')
+    def get(self):
+        amenities = data_manager.get_list(EntityType.AMENITY)
+        return amenities, 200
 
 
+@amenities_api.route("/<string:amenity_id>")
+class EditAmenity(Resource):
+    @amenities_api.doc('get inform about an amenity')
+    def get(self, amenity_id):
+        result = data_manager.get(amenity_id, EntityType.AMENITY)
+        if result is None:
+            api.abort(404, message='Amenity not found')
+        else:
+            return result, 200
+
+    @amenities_api.doc('update inform about an amenity')
+    @amenities_api.expect(amenity_model)
+    def put(self, amenity_id):
+        pass
 
     @amenities_api.doc('delete a specific amenity')
     def delete(self, amenity_id):

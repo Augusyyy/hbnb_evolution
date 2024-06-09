@@ -78,9 +78,6 @@ class DataManager(IPersistenceManager):
             else:
                 return None
 
-        elif entity_type == EntityType.CITY:
-            pass
-
         elif entity_type == EntityType.PLACE:
             for i in range(len(self.__cities['Place'])):
                 if self.__cities['Place'][i]['id'] == entity_id:

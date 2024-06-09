@@ -59,13 +59,13 @@ class NewCity(Resource):
         return cities, 200
 
 
-@cities_api.route('/<string:country_id>')
+@cities_api.route('/<string:city_id>')
 class Cities(Resource):
     @cities_api.doc('Retrieve details of a specific city')
-    def get(self, country_id):
+    def get(self, city_id):
         cities = data_manager.get_list(EntityType.CITY)
         for city in cities:
-            if city['id'] == country_id:
+            if city['id'] == city_id:
                 return city, 200
         return {'message': 'City not found'}, 404
 
@@ -105,7 +105,7 @@ class Cities(Resource):
             if city['name'] == name and city['country_id'] == country_id and city['id'] != country_id:
                 api.abort(409, message='City name already exists in this country')
 
-        c = City(data['name'], data['country_id'])
+        c = City(data['name'], json_data.get('country_id'))
         c.id = city_id
         result = data_manager.update(c)
         if result is None:
@@ -114,8 +114,8 @@ class Cities(Resource):
             return result, 200
 
     @cities_api.doc('Delete a specific city')
-    def delete(self, city_id):
-        result = data_manager.delete(city_id, EntityType.USER)
+    def delete(self, country_id):
+        result = data_manager.delete(country_id, EntityType.CITY)
         if result is None:
             api.abort(404, message='User not found')
         else:
