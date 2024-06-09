@@ -13,12 +13,12 @@ class Review:
         self.updated_at = self.created_at
 
     @property
-    def __user_id(self):
-        return self.__commentor_user_id
+    def user_id(self):
+        return self.__user_id
 
-    @__user_id.setter
-    def __user_id(self, value):
-        self.__commentor_user_id = value
+    @user_id.setter
+    def user_id(self, value):
+        self.__user_id = value
         self.updated_at = datetime.now().timestamp()
 
     @property
