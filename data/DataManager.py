@@ -243,6 +243,7 @@ class DataManager(IPersistenceManager):
                     }
                     self.__review['Review'][idx] = updated_review
                     save_data('data/review.json', self.__review)
+                    return updated_review
             return None
 
         elif isinstance(entity, Place):
@@ -264,6 +265,7 @@ class DataManager(IPersistenceManager):
                     }
                     self.__places['Place'][idx] = updated_place
                     save_data('data/place.json', self.__places)
+                    return updated_place
             return None
 
         elif isinstance(entity, Amenity):
@@ -277,6 +279,7 @@ class DataManager(IPersistenceManager):
                     }
                     self.__amenity['Amenity'][idx] = updated_amenity
                     save_data('data/amenity.json', self.__amenity)
+                    return updated_amenity
             return None
 
         elif isinstance(entity, Country):
@@ -291,6 +294,7 @@ class DataManager(IPersistenceManager):
                     }
                     self.__countries['Country'][idx] = updated_country
                     save_data('data/country.json', self.__countries)
+                    return updated_country
             return None
 
         elif isinstance(entity, City):
@@ -305,6 +309,7 @@ class DataManager(IPersistenceManager):
                     }
                     self.__cities['City'][idx] = updated_city
                     save_data('data/city.json', self.__cities)
+                    return updated_city
             return None
 
         else:

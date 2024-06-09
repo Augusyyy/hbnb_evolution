@@ -119,4 +119,4 @@ class Cities(Resource):
         if result is None:
             api.abort(404, message='User not found')
         else:
-            return jsonify({"message": "User deleted successfully"})
+            return jsonify({"message": "deleted successfully"})

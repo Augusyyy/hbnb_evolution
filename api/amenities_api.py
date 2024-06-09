@@ -1,7 +1,8 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import amenities_api
+from api import amenities_api, data_manager, api
+from data.DataManager import EntityType
 from model.amenity import Amenity
 
 amenity_model = amenities_api.model('Amenity', {
@@ -34,4 +35,8 @@ class EditAmenity(Resource):
 
     @amenities_api.doc('delete a specific amenity')
     def delete(self, amenity_id):
-        pass
+        result = data_manager.delete(amenity_id, EntityType.AMENITY)
+        if result is None:
+            api.abort(404, message='Amenity not found')
+        else:
+            return jsonify({"message": "deleted successfully"})
