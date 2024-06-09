@@ -160,7 +160,7 @@ class DataManager(IPersistenceManager):
                 'updated_at': entity.updated_at,
                 'user_id': entity.user_id,
                 'place_id': entity.place_id,
-                'feedback': entity.comment,
+                'comment': entity.comment,
                 'rating': entity.rating
             }
             # add data to memory
