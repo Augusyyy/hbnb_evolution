@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
-from api import places_api, api, data_manager, review_model
+from api import places_api, api, data_manager
 from data.DataManager import DataManager, EntityType
 from model.place import Place
 from model.review import Review

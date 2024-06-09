@@ -17,7 +17,7 @@ class Place:
         self.__bathrooms = bathrooms
         self.__price_per_night = price_per_night
         self.__max_guests = max_guests
-        self.created_at = datetime.now()
+        self.created_at = datetime.now().timestamp()
         self.updated_at = self.created_at
 
 

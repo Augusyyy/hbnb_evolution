@@ -47,10 +47,11 @@ class CountryCities(Resource):
         if country_found is None:
             api.abort(404, message='Country not found')
 
-        all_cities = data_manager.get_list(EntityType.COUNTRY)
+        all_cities = data_manager.get_list(EntityType.CITY)
         cities_in_country = []
         for city in all_cities:
             if city['country_id'] == country_found['id']:
+                city['country_code'] = country_found['code']
                 cities_in_country.append(city)
 
         if cities_in_country:

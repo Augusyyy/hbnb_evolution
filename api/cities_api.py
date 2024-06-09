@@ -13,7 +13,6 @@ city_model = cities_api.model('City', {
 })
 
 
-
 @cities_api.route("/")
 class NewCity(Resource):
     @cities_api.expect(city_model)
@@ -70,6 +69,9 @@ class Cities(Resource):
             if city['id'] == city_id:
                 return city, 200
         api.abort(400, message='Missing required field')
+
+        countries = {country['id']: country['code'] for country in data_manager.get_list(EntityType.COUNTRY)}
+        city['country_code'] = countries.get(city['country_id'])
 
     @cities_api.doc('Update an existing cities inform')
     @cities_api.expect(city_model)
