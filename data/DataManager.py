@@ -158,7 +158,7 @@ class DataManager(IPersistenceManager):
                 'id': entity.id,
                 'created_at': entity.created_at,
                 'updated_at': entity.updated_at,
-                'commentor_user_id': entity.user_id,
+                'user_id': entity.user_id,
                 'place_id': entity.place_id,
                 'feedback': entity.comment,
                 'rating': entity.rating
