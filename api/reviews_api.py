@@ -63,3 +63,4 @@ class EditReview(Resource):
             api.abort(404, message='Review not found')
         else:
             return jsonify({"message": "deleted successfully"})
+        
