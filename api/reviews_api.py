@@ -5,12 +5,11 @@ from api import reviews_api, api, data_manager
 from data.DataManager import DataManager, EntityType
 from model.review import Review
 
-
 review_model = reviews_api.model('Review', {
-    'comment_user_id': fields.String(required=True, description='comment user id'),
-    'place_id': fields.String(required=True, description='place id'),
-    'feedback': fields.String(required=True, description='feedback'),
-    'rating': fields.Float(required=True, description='rating')
+    'user_id': fields.String(required=True, description='Comment user id'),
+    'place_id': fields.String(required=True, description='Place id'),
+    'comment': fields.String(required=True, description='Comment'),
+    'rating': fields.Float(required=True, description='Rating')
 })
 
 
@@ -18,11 +17,20 @@ review_model = reviews_api.model('Review', {
 class EditReview(Resource):
     @reviews_api.doc('inform about review')
     def get(self, review_id):
-        result = data_manager.get(review_id, EntityType.REVIEW)
-        if result is None:
+        review = data_manager.get(review_id, EntityType.REVIEW)
+        if review is None:
             api.abort(404, message='Review not found')
         else:
-            return result, 200
+            detailed_review = {
+                'id': review['id'],
+                'place_id': review['place_id'],
+                'user_id': review['user_id'],
+                'rating': review['rating'],
+                'comment': review['comment'],
+                'created_at': review['created_at'],
+                'updated_at': review['updated_at']
+            }
+            return detailed_review, 200
 
     @reviews_api.doc('update review')
     @reviews_api.expect(review_model)
@@ -34,21 +42,21 @@ class EditReview(Resource):
         if data is None:
             api.abort(400, message='Invalid input')
 
-        commentor_user_id = data.get('commentor_user_id')
-        feedback = data.get('feedback')
+        user_id = data.get('user_id')
+        comment = data.get('comment')
         rating = data.get('rating')
 
-        if not (commentor_user_id and feedback and rating is not None):
+        if not (user_id and comment and rating is not None):
             api.abort(400, message='Missing required field')
 
         if not (isinstance(rating, (int, float)) and 1 <= rating <= 5):
             api.abort(400, message='Invalid rating value')
 
-        review_to_update = review_model.get(review_id, EntityType.REVIEW)
+        review_to_update = data_manager.get(review_id, EntityType.REVIEW)
         if review_to_update is None:
             api.abort(404, message='Review not found')
 
-        updated_review = Review(commentor_user_id, review_to_update['place_id'], feedback, rating)
+        updated_review = Review(user_id, review_to_update['place_id'], comment, rating)
         updated_review.id = review_id
 
         result = data_manager.update(updated_review)
