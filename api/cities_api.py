@@ -54,8 +54,12 @@ class NewCity(Resource):
     @cities_api.doc('Retrieve all cities.')
     def get(self):
         cities = data_manager.get_list(EntityType.CITY)
-        return cities, 200
+        countries = {country['id']: country['code'] for country in data_manager.get_list(EntityType.COUNTRY)}
 
+        for city in cities:
+            city['country_code'] = countries.get(city['country_id'])
+
+        return cities, 200
 
 @cities_api.route('/<string:city_id>')
 class Cities(Resource):

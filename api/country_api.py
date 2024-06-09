@@ -29,8 +29,7 @@ class CountriesByCode(Resource):
         for country in countries:
             if country['code'] == country_code:
                 return country, 200
-            else:
-                return api.abort(404, message='Country not found')
+        return api.abort(404, message='Country not found')
 
 
 @country_api.route('/<string:country_code>/cities')
