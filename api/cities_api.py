@@ -1,3 +1,5 @@
+import copy
+from copy import deepcopy
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
@@ -52,7 +54,7 @@ class NewCity(Resource):
 
     @cities_api.doc('Retrieve all cities.')
     def get(self):
-        cities = data_manager.get_list(EntityType.CITY)
+        cities = copy.deepcopy(data_manager.get_list(EntityType.CITY))
         countries = {country['id']: country['code'] for country in data_manager.get_list(EntityType.COUNTRY)}
 
         for city in cities:
@@ -64,14 +66,18 @@ class NewCity(Resource):
 class Cities(Resource):
     @cities_api.doc('Retrieve details of a specific city')
     def get(self, city_id):
-        cities = data_manager.get_list(EntityType.CITY)
-        for city in cities:
-            if city['id'] == city_id:
-                return city, 200
-        api.abort(400, message='Missing required field')
+        city = data_manager.get(city_id, EntityType.CITY)
+
+        if city is None:
+            api.abort(400, message='City not found')
+
+        city_copy = deepcopy(city)
 
         countries = {country['id']: country['code'] for country in data_manager.get_list(EntityType.COUNTRY)}
-        city['country_code'] = countries.get(city['country_id'])
+
+        city_copy['country_code'] = countries.get(city_copy['country_id'])
+
+        return city_copy, 200
 
     @cities_api.doc('Update an existing cities inform')
     @cities_api.expect(city_model)
