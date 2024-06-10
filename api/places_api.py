@@ -1,3 +1,4 @@
+import copy
 from datetime import datetime
 from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
@@ -102,14 +103,16 @@ class NewPlace(Resource):
     @places_api.doc('list of all place')
     def get(self):
         places = data_manager.get_list(EntityType.PLACE)
+        copy_places = copy.deepcopy(places)
+
         cities = {city['id']: city for city in data_manager.get_list(EntityType.CITY)}
         amenities = {amenity['id']: amenity for amenity in data_manager.get_list(EntityType.AMENITY)}
 
-        for place in places:
+        for place in copy_places:
             place['city'] = cities.get(place['city_id'])
             place['amenities'] = [amenities.get(aid) for aid in place['amenity_ids']]
 
-        return places, 200
+        return copy_places, 200
 
 
 @places_api.route('/<string:place_id>')
@@ -120,10 +123,11 @@ class EditPlace(Resource):
         if result is None:
             api.abort(404, message='Place not found')
 
-        place['city'] = data_manager.get(result['city_id'], EntityType.CITY)
-        place['amenities'] = [data_manager.get(aid, EntityType.AMENITY) for aid in result['amenity_ids']]
+        final_result = data_manager.save(result)
+        place['city'] = data_manager.get(final_result['city_id'], EntityType.CITY)
+        place['amenities'] = [data_manager.get(aid, EntityType.AMENITY) for aid in final_result['amenity_ids']]
 
-        return result, 200
+        return final_result, 200
 
     @places_api.expect(place_model)
     @places_api.doc('update a place')
