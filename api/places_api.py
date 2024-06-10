@@ -3,6 +3,7 @@ from flask_restx import Resource, Api, fields
 from flask import Flask, jsonify, request
 from api import places_api, api, data_manager
 from data.DataManager import DataManager, EntityType
+from model import place
 from model.place import Place
 from model.review import Review
 
@@ -25,7 +26,8 @@ place_model = places_api.model('Place', {
     'number_of_rooms': fields.Integer(required=True, description='Number of rooms'),
     'bathrooms': fields.Integer(required=True, description='Number of bathrooms'),
     'price_per_night': fields.Integer(required=True, description='Price per night'),
-    'max_guests': fields.Integer(required=True, description='Maximum guests')
+    'max_guests': fields.Integer(required=True, description='Maximum guests'),
+    'amenity_ids': fields.List(fields.String, required=False, description='List of amenity UUIDs')  # Add amenity_ids
 })
 
 
@@ -52,6 +54,7 @@ class NewPlace(Resource):
         bathrooms = data.get('bathrooms')
         price_per_night = data.get('price_per_night')
         max_guests = data.get('max_guests')
+        amenity_ids = data.get('amenity_ids', [])
 
 
         if not (name and host_user_id and city_id and description and address and latitude and longitude and number_of_rooms is not None and bathrooms is not None and price_per_night is not None and max_guests is not None):
@@ -82,19 +85,30 @@ class NewPlace(Resource):
         if not any(city['id'] == city_id for city in cities):
             api.abort(400, message='Invalid city ID')
 
+        amenities = data_manager.get_list(EntityType.AMENITY)
+        for amenity_id in amenity_ids:
+            if not any(amenity['id'] == amenity_id for amenity in amenities):
+                api.abort(400, message=f'Invalid amenity ID: {amenity_id}')
+
         places = data_manager.get_list(EntityType.PLACE)
         for place in places:
             if place['name'] == name:
                 api.abort(409, message='Place name already exists')
 
-        new_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms,
-                          bathrooms, price_per_night, max_guests)
+        new_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms, bathrooms, price_per_night, max_guests, amenity_ids)
         result = data_manager.save(new_place)
         return result, 201
 
     @places_api.doc('list of all place')
     def get(self):
         places = data_manager.get_list(EntityType.PLACE)
+        cities = {city['id']: city for city in data_manager.get_list(EntityType.CITY)}
+        amenities = {amenity['id']: amenity for amenity in data_manager.get_list(EntityType.AMENITY)}
+
+        for place in places:
+            place['city'] = cities.get(place['city_id'])
+            place['amenities'] = [amenities.get(aid) for aid in place.get('amenity_ids', [])]
+
         return places, 200
 
 
@@ -105,8 +119,11 @@ class EditPlace(Resource):
         result = data_manager.get(place_id, EntityType.PLACE)
         if result is None:
             api.abort(404, message='Place not found')
-        else:
-            return result, 200
+
+        place['city'] = data_manager.get(place['city_id'], EntityType.CITY)
+        place['amenities'] = [data_manager.get(aid, EntityType.AMENITY) for aid in place.get('amenity_ids', [])]
+
+        return result, 200
 
     @places_api.expect(place_model)
     @places_api.doc('update a place')
@@ -129,6 +146,7 @@ class EditPlace(Resource):
         bathrooms = data.get('bathrooms')
         price_per_night = data.get('price_per_night')
         max_guests = data.get('max_guests')
+        amenity_ids = data.get('amenity_ids', [])
 
         if not (name and host_user_id and city_id and description and address and latitude and longitude and number_of_rooms is not None and bathrooms is not None and price_per_night is not None and max_guests is not None):
             api.abort(400, message='Missing required field')
@@ -157,6 +175,11 @@ class EditPlace(Resource):
         cities = data_manager.get_list(EntityType.CITY)
         if not any(city['id'] == city_id for city in cities):
             api.abort(400, message='Invalid city ID')
+
+        amenities = data_manager.get_list(EntityType.AMENITY)
+        for amenity_id in amenity_ids:
+            if not any(amenity['id'] == amenity_id for amenity in amenities):
+                api.abort(400, message=f'Invalid amenity ID: {amenity_id}')
 
         place_to_update = data_manager.get(place_id, EntityType.PLACE)
         if place_to_update is None:

@@ -182,7 +182,8 @@ class DataManager(IPersistenceManager):
                 'number_of_rooms': entity.number_of_rooms,
                 'bathrooms': entity.bathrooms,
                 'price_per_night': entity.price_per_night,
-                'max_guests': entity.max_guests
+                'max_guests': entity.max_guests,
+                'amenity_ids': entity.amenity_ids
             }
             # add data to memory
             self.__places['Place'].append(new_entity)
@@ -271,7 +272,8 @@ class DataManager(IPersistenceManager):
                         'number_of_rooms': entity.number_of_rooms,
                         'bathrooms': entity.bathrooms,
                         'price_per_night': entity.price_per_night,
-                        'max_guests': entity.max_guests
+                        'max_guests': entity.max_guests,
+                        'amenity_ids': entity.amenity_ids
                     }
                     self.__places['Place'][idx] = updated_place
                     save_data('data/place.json', self.__places)
