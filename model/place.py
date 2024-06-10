@@ -125,7 +125,7 @@ class Place:
     def amenity_ids(self):
         return self.__amenity_ids
 
-    @max_guests.setter
+    @amenity_ids.setter
     def amenity_ids(self, value):
         self.__amenity_ids = value
         self.updated_at = datetime.now().timestamp()

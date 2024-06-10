@@ -107,7 +107,7 @@ class NewPlace(Resource):
 
         for place in places:
             place['city'] = cities.get(place['city_id'])
-            place['amenities'] = [amenities.get(aid) for aid in place.get('amenity_ids', [])]
+            place['amenities'] = [amenities.get(aid) for aid in place['amenity_ids']]
 
         return places, 200
 
@@ -120,8 +120,8 @@ class EditPlace(Resource):
         if result is None:
             api.abort(404, message='Place not found')
 
-        place['city'] = data_manager.get(place['city_id'], EntityType.CITY)
-        place['amenities'] = [data_manager.get(aid, EntityType.AMENITY) for aid in place.get('amenity_ids', [])]
+        place['city'] = data_manager.get(result['city_id'], EntityType.CITY)
+        place['amenities'] = [data_manager.get(aid, EntityType.AMENITY) for aid in result['amenity_ids']]
 
         return result, 200
 
@@ -190,7 +190,8 @@ class EditPlace(Resource):
             if place['name'] == name and place['id'] != place_id:
                 api.abort(409, message='Place name already exists')
 
-        updated_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms, bathrooms, price_per_night, max_guests)
+        updated_place = Place(host_user_id, city_id, name, description, address, latitude, longitude, number_of_rooms,
+                              bathrooms, price_per_night, max_guests, amenity_ids)
         updated_place.id = place_id
         result = data_manager.update(updated_place)
         if result is None:

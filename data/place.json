@@ -14,7 +14,11 @@
             "price_per_night": 150.00,
             "max_guests": 2,
             "created_at": 1715566897.190475,
-            "updated_at": 1715566897.190475
+            "updated_at": 1715566897.190475,
+            "amenity_ids":[
+                "a34bb185-d6e7-4d78-a519-995c51ada64d",
+                "69cf5e16-b2dc-4bec-ac39-991850fc946b"
+            ]
         },
         {
             "id": "cee845de-c341-4f5a-a0c5-2ca1f4c327b2",
@@ -30,12 +34,16 @@
             "price_per_night": 120.00,
             "max_guests": 1,
             "created_at": 1715566897.190596,
-            "updated_at": 1715566897.190596
+            "updated_at": 1715566897.190596,
+            "amenity_ids":[
+                "a34bb185-d6e7-4d78-a519-995c51ada64d",
+                "69cf5e16-b2dc-4bec-ac39-991850fc946b"
+            ]
         },
         {
             "id": "a1a3d915-68c8-4771-9bf4-498b9ae62463",
             "host_user_id": "0215a722-a3fc-4f08-9120-f8621147f2be",
-            "city": "687da7c4-eaba-411f-b00d-65c954eb2b8c",
+            "city_id": "687da7c4-eaba-411f-b00d-65c954eb2b8c",
             "name": "Box Hill Motel",
             "description": "Very expensive motel",
             "address": "Next to Box Hill bus terminal",
@@ -46,7 +54,11 @@
             "price_per_night": 200.00,
             "max_guests": 3,
             "created_at": 1715566923.500334,
-            "updated_at": 1715566923.500334
+            "updated_at": 1715566923.500334,
+            "amenity_ids":[
+                "a34bb185-d6e7-4d78-a519-995c51ada64d",
+                "69cf5e16-b2dc-4bec-ac39-991850fc946b"
+            ]
         }
     ]
 }
